@@ -17,26 +17,21 @@ passport.deserializeUser((id, done) => {
 });
 
 passport.use(new GoogleStrategy({
-    clientID: keys.googleClientID,
-    clientSecret: keys.googleClientSecret,
-    callbackURL: '/auth/google/callback',
-    proxy: true
-}, (accessToken, refreshToken, profile, done) => {
-    User.findOne({
-        googleId: profile.id
-    }).then(existingUser => {
+        clientID: keys.googleClientID,
+        clientSecret: keys.googleClientSecret,
+        callbackURL: '/auth/google/callback',
+        proxy: true
+    },
+    async (accessToken, refreshToken, profile, done) => {
+        const existingUser = await User.findOne({
+            googleId: profile.id
+        });
         if (existingUser) {
             // user already exists in the database
-            done(null, existingUser);
-        } else {
-            // create a new user
-            // Create a new user in MongoDB
-            new User({
-                    googleId: profile.id
-                })
-                .save()
-                .then(user => done(null, user));
+            return done(null, existingUser);
         }
-    });
 
-}));
+        const user  = await new User({googleId: profile.id}).save();
+        done(null, user);
+    }
+));
