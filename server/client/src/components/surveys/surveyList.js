@@ -14,7 +14,7 @@ class SurveyList extends Component {
                     <div class="card-content white-text">
                     <span class="card-title">{survey.title}</span>
                     <p>{survey.body}</p>
-                    <p>Sent On: {new Date({survey.dateSent}).toLocaleDateString()}</p>
+                    <p>Sent On: {new Date(survey.dateSent).toLocaleDateString()}</p>
                     </div>
                     <div class="card-action">
                         <a>Yes: {survey.yes}</a>
@@ -24,7 +24,7 @@ class SurveyList extends Component {
             );
         });
     }
-
+    
     render() {
         return (
             <div>
